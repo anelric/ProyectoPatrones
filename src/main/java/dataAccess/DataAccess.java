@@ -249,43 +249,43 @@ public class DataAccess  {
 	 */
 	public List<Sale> getPublishedSales(String desc, Date pubDate) {
 		open();
-		db.getTransaction().begin();
-		
-		Calendar c = Calendar.getInstance();
-		c.setTime(pubDate);
-		c.set(Calendar.HOUR_OF_DAY, 23);
-		c.set(Calendar.MINUTE, 59);
-		c.set(Calendar.SECOND, 59);
-		Date finDelDia = c.getTime();
-		
+		db.getTransaction().begin();		
 		System.out.println(">> DataAccess: getProducts=> from= "+desc);
-
 		List<Sale> res = new ArrayList<Sale>();	
 		TypedQuery<Sale> query = db.createQuery("SELECT s FROM Sale s WHERE s.title LIKE ?1 AND s.pubDate <=?2",Sale.class);   
 		query.setParameter(1, "%"+desc+"%");
-		query.setParameter(2, finDelDia);
-		
+		query.setParameter(2, calcularFinDelDia(pubDate));
 		List<Sale> sales = query.getResultList();
 		Date ahora =new Date();
 	 	 for (Sale sale:sales){
-	 		// nuevo
-				if (sale.getEsSubasta() == 1 && sale.isHabilitado() && sale.getFinDate() != null && sale.getFinDate().before(ahora)) {
-					
-					if (!sale.getOfertas().isEmpty()) {
-						Oferta ofertaGanadora = sale.getOfertas().get(0);
-						aceptarOfertaIni(sale, ofertaGanadora);
-					}
-					else{
-						sale.setHabilitado(false);
-					}
-				} 
-				
-				else if (sale.isHabilitado()) {
-					res.add(sale);
-				}
+	 		 procesarVenta(sale,ahora,res);
 		  }
 	 	 db.getTransaction().commit();
 	 	return res;
+	}
+	
+	public Date calcularFinDelDia(Date fecha) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(fecha);
+		c.set(Calendar.HOUR_OF_DAY, 23);
+		c.set(Calendar.MINUTE, 59);
+		c.set(Calendar.SECOND, 59);
+		return c.getTime();
+	}
+	
+	public void procesarVenta(Sale sale, Date ahora, List<Sale> res) {
+		if (sale.getEsSubasta() == 1 && sale.isHabilitado() && sale.getFinDate() != null && sale.getFinDate().before(ahora)) {
+			if (!sale.getOfertas().isEmpty()) {
+				Oferta ofertaGanadora = sale.getOfertas().get(0);
+				aceptarOfertaIni(sale, ofertaGanadora);
+			}
+			else{
+				sale.setHabilitado(false);
+			}
+		} 
+		else if (sale.isHabilitado()) {
+			res.add(sale);
+		}
 	}
 
 public void open(){
