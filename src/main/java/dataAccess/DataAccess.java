@@ -657,46 +657,56 @@ public void open(){
         db.getTransaction().begin();
         Sale saleEnBD = db.find(Sale.class, s.getSaleNumber());
         if (saleEnBD != null) {
-            if (!saleEnBD.getOfertas().isEmpty()) {
-                List<Oferta> ofertasADevolver = new ArrayList<>(saleEnBD.getOfertas());
-                for(Oferta ofertaAct : ofertasADevolver) {
-                    Comprador c = db.find(Comprador.class, ofertaAct.getnUser());
-                        
-                    if (c != null) {
-                        float nuevoSaldo = c.getSaldo() + ofertaAct.getPrecio();
-                        c.setSaldo(nuevoSaldo);
-                        c.getOfertasEnCurso().remove(ofertaAct);
-                        db.persist(c);
-                    }
-                    db.remove(ofertaAct);
-                }
-                saleEnBD.getOfertas().clear(); 
-            }
-                
-            if (saleEnBD.getSeller() != null) {
-                Seller vendedor = db.find(Seller.class, saleEnBD.getSeller().getNombreUsuario());
-                if (vendedor != null) {
-                    vendedor.getSales().remove(saleEnBD);
-                    db.persist(vendedor);
-                }
-            }
-            
-            TypedQuery<Comprador> query = db.createQuery("SELECT c FROM Comprador c JOIN c.historialDeCompras h WHERE h = ?1",Comprador.class);    
-            query.setParameter(1, saleEnBD);
-            
-            List<Comprador> comprador = query.getResultList(); 
-            
-            if (!comprador.isEmpty()) {
-                Comprador cElim = db.find(Comprador.class, comprador.get(0).getNombreUsuario());
-                cElim.getHistorialDeCompras().remove(saleEnBD);
-                db.persist(cElim);
-            }
-            
+        	tieneOfertas(saleEnBD);  
+        	tieneSeller(saleEnBD);
+        	tieneComprador(saleEnBD);
+
             db.remove(saleEnBD);
             db.getTransaction().commit();
         } 
         close();
     }
+	
+	public void tieneOfertas(Sale saleEnBD) {
+		if (!saleEnBD.getOfertas().isEmpty()) {
+            List<Oferta> ofertasADevolver = new ArrayList<>(saleEnBD.getOfertas());
+            for(Oferta ofertaAct : ofertasADevolver) {
+                Comprador c = db.find(Comprador.class, ofertaAct.getnUser());
+                    
+                if (c != null) {
+                    float nuevoSaldo = c.getSaldo() + ofertaAct.getPrecio();
+                    c.setSaldo(nuevoSaldo);
+                    c.getOfertasEnCurso().remove(ofertaAct);
+                    db.persist(c);
+                }
+                db.remove(ofertaAct);
+            }
+            saleEnBD.getOfertas().clear();
+		}
+	}
+	
+	public void tieneSeller(Sale saleEnBD) {
+		if (saleEnBD.getSeller() != null) {
+            Seller vendedor = db.find(Seller.class, saleEnBD.getSeller().getNombreUsuario());
+            if (vendedor != null) {
+                vendedor.getSales().remove(saleEnBD);
+                db.persist(vendedor);
+            }
+        }
+	}
+	
+	public void tieneComprador(Sale saleEnBD) {
+		TypedQuery<Comprador> query = db.createQuery("SELECT c FROM Comprador c JOIN c.historialDeCompras h WHERE h = ?1",Comprador.class);    
+        query.setParameter(1, saleEnBD);
+        
+        List<Comprador> comprador = query.getResultList(); 
+        
+        if (!comprador.isEmpty()) {
+            Comprador cElim = db.find(Comprador.class, comprador.get(0).getNombreUsuario());
+            cElim.getHistorialDeCompras().remove(saleEnBD);
+            db.persist(cElim);
+        }
+	}
 
 	public void devolverCompra(Sale s, String usuario) {
 		open();

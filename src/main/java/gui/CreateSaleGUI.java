@@ -39,10 +39,10 @@ public class CreateSaleGUI extends JFrame {
 	private JTextField fieldTitle=new JTextField();
 	private JTextField fieldDescription=new JTextField();
 	
-	private JLabel jLabelTitle = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("CreateSaleGUI.Title"));
-	private JLabel jLabelDescription = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("CreateSaleGUI.Description")); 
-	private JLabel jLabelProductStatus = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("CreateSaleGUI.Status"));
-	private JLabel jLabelPrice = new JLabel(ResourceBundle.getBundle("Etiquetas").getString("CreateSaleGUI.Price"));
+	private JLabel jLabelTitle = crearLabel("CreateSaleGUI.Title");
+	private JLabel jLabelDescription = crearLabel("CreateSaleGUI.Description"); 
+	private JLabel jLabelProductStatus = crearLabel("CreateSaleGUI.Status");
+	private JLabel jLabelPrice = crearLabel("CreateSaleGUI.Price");
 	private JTextField jTextFieldPrice = new JTextField();
 
 	private JCalendar jCalendar = new JCalendar();
@@ -62,6 +62,10 @@ public class CreateSaleGUI extends JFrame {
 	private JLabel jLabelError = new JLabel();
 	private JFrame thisFrame;
 	private final JButton btnNewButton_2 = new JButton("grabar Imagen"); //$NON-NLS-1$ //$NON-NLS-2$
+	
+	public JLabel crearLabel(String s) {
+		return new JLabel(ResourceBundle.getBundle("Etiquetas").getString(s));
+	}
 
 	public CreateSaleGUI(String usuario) {
 
