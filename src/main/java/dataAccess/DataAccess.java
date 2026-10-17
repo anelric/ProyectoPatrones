@@ -56,8 +56,8 @@ public class DataAccess  {
 	private static final Logger LOGGER = Logger.getLogger(DataAccess.class.getName());
 
 	ConfigXML c=ConfigXML.getInstance();
-
-     public DataAccess()  {
+	
+	 public DataAccess()  {
 		if (c.isDatabaseInitialized()) {
 			String fileName=c.getDbFilename();
 
@@ -438,24 +438,24 @@ public void open(){
 	}
     
     
-    public void editSale(Sale sale, String text, int numStatus, float price, Date trim, boolean hab) {
+    public void editSale(Sale sale, EditSaleParameter parameterObject) {
     	open();
 		db.getTransaction().begin();
 		//db.persist(sale);
 		Sale s = db.find(Sale.class, sale.getSaleNumber());
 		//Sale s = sale.getSeller().getSales().get(sale.getSeller().getSales().indexOf(sale));
-		s.setDescription(text);
-		s.setStatus(numStatus);
-		s.setPrice(price);
-		s.setPublicationDate(trim);
-		if (hab) {
+		s.setDescription(parameterObject.getText());
+		s.setStatus(parameterObject.getNumStatus());
+		s.setPrice(parameterObject.getPrice());
+		s.setPublicationDate(parameterObject.getTrim());
+		if (parameterObject.isHab()) {
 			Calendar c = Calendar.getInstance();
 			c.setTime(s.getPublicationDate());
 			//c.add(Calendar.DAY_OF_MONTH, 7);
 			c.add(Calendar.MINUTE, 2);
 			s.setFinDate(c.getTime());
 		}
-		s.setHabilitado(hab);
+		s.setHabilitado(parameterObject.isHab());
 		db.persist(s);
 		//db.persist(sale.getSeller());
 		db.getTransaction().commit();

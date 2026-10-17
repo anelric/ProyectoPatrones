@@ -7,6 +7,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 import dataAccess.DataAccess;
+import dataAccess.EditSaleParameter;
 import domain.Comprador;
 import domain.Cuentas;
 import domain.Oferta;
@@ -133,7 +134,7 @@ public class BLFacadeImplementation  implements BLFacade {
 	
 	
 	public void editSale(Sale sale, String text, int numStatus, float price, Date trim, boolean hab) {
-    	dbManager.editSale(sale, text, numStatus, price, trim, hab);
+    	dbManager.editSale(sale, new EditSaleParameter(text, numStatus, price, trim, hab));
     }
 	
 	public void eliminarUsuario(String usuario) {
