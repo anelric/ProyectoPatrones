@@ -6,6 +6,7 @@ import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+import dataAccess.CreateSaleParameter;
 import dataAccess.DataAccess;
 import dataAccess.EditSaleParameter;
 import domain.Comprador;
@@ -52,7 +53,7 @@ public class BLFacadeImplementation  implements BLFacade {
    @WebMethod
 	public Sale createSale(String title, String description,int status, float price, Date pubDate, String usuario, File file, int tVenta) throws  FileNotUploadedException, MustBeLaterThanTodayException, SaleAlreadyExistException {
 		dbManager.open();
-		Sale product=dbManager.createSale(title, description, status, price, pubDate, usuario, file, tVenta);		
+		Sale product=dbManager.createSale(title, description, status, new CreateSaleParameter(price, pubDate, usuario, file, tVenta));		
 		dbManager.close();
 		return product;
    };

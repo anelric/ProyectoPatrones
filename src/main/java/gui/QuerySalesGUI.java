@@ -100,23 +100,7 @@ public class QuerySalesGUI extends JFrame {
 					if (sales.isEmpty() ) jLabelProducts.setText("No hay ventas disponibles");
 					else jLabelProducts.setText(ResourceBundle.getBundle("Etiquetas").getString("QuerySalesGUI.Products"));
 					for (Sale sale:sales){
-						if (sale.isHabilitado()) {
-							if (!(userActual instanceof Friendly && sale.getEsSubasta() == 1)) {
-								Vector<Object> row = new Vector<Object>();
-								row.add(sale.getTitle());
-								row.add(sale.getPrice());
-								row.add(new SimpleDateFormat("dd-MM-yyyy").format(sale.getPublicationDate()));
-								int tVenta = sale.getEsSubasta();
-								if(tVenta==0) {
-									row.add("Venta");
-								}
-								else {
-									row.add("Subasta");
-								}
-								row.add(sale); // product object added in order to obtain it with tableModelProducts.getValueAt(i,2)
-								tableModelProducts.addRow(row);	
-							}
-						}
+						anadirSale(userActual, sale);
 					}
 				} catch (Exception e1) {
 
@@ -130,6 +114,26 @@ public class QuerySalesGUI extends JFrame {
 				tableProducts.getColumnModel().removeColumn(tableProducts.getColumnModel().getColumn(4)); // not shown in JTable
 		 		
 		 	}
+
+			private void anadirSale(Usuario userActual, Sale sale) {
+				if (sale.isHabilitado()) {
+					if (!(userActual instanceof Friendly && sale.getEsSubasta() == 1)) {
+						Vector<Object> row = new Vector<Object>();
+						row.add(sale.getTitle());
+						row.add(sale.getPrice());
+						row.add(new SimpleDateFormat("dd-MM-yyyy").format(sale.getPublicationDate()));
+						int tVenta = sale.getEsSubasta();
+						if(tVenta==0) {
+							row.add("Venta");
+						}
+						else {
+							row.add("Subasta");
+						}
+						row.add(sale); // product object added in order to obtain it with tableModelProducts.getValueAt(i,2)
+						tableModelProducts.addRow(row);	
+					}
+				}
+			}
 		 });
 		jButtonSearch.setBounds(427, 56, 117, 29);
 		getContentPane().add(jButtonSearch);

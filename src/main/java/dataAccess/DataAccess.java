@@ -106,8 +106,8 @@ public class DataAccess  {
 			float price = 100;
 			File foto1 = new File("src/main/resources/images/bici.jpg");
 			File foto2 = new File("src/main/resources/images/descarga.jpg");
-			createSale("A", "a", 1, price,  today, vendedor1, foto1, 0);
-			createSale("B", "b", 1, price,  today, vendedor1, foto2, 1);
+			createSale("A", "a", 1, new CreateSaleParameter(price,  today, vendedor1, foto1, 0));
+			createSale("B", "b", 1, new CreateSaleParameter(price,  today, vendedor1, foto2, 1));
 
 
 		/*	
@@ -177,12 +177,15 @@ public class DataAccess  {
 	 * @return Product
  	 * @throws SaleAlreadyExistException if the same product already exists for the seller
 	 */
-	public Sale createSale(String title, String description, int status, float price,  Date pubDate, String usuario, File file, int tVenta) throws  FileNotUploadedException, MustBeLaterThanTodayException, SaleAlreadyExistException {
-		
+	public Sale createSale(String title, String description, int status, CreateSaleParameter infoAdic) throws  FileNotUploadedException, MustBeLaterThanTodayException, SaleAlreadyExistException {
+		float price = infoAdic.getPrice();
+		String usuario = infoAdic.getUsuario();
+		Date pubDate = infoAdic.getPubDate();
+		File file = infoAdic.getFile();
+		int tVenta = infoAdic.getTVenta();
 
 		LOGGER.info(">> DataAccess: createProduct=> title= " + title + " usuario=" + usuario);
 		try {
-		
 
 			if(pubDate.before(UtilDate.trim(new Date()))) {
 				throw new MustBeLaterThanTodayException(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.ErrorSaleMustBeLaterThanToday"));
@@ -366,28 +369,13 @@ public void open(){
 			Comprador comprador = db.find(Comprador.class, usuario);
 			Sale producto = db.find(Sale.class, pro.getSaleNumber());
 			if (comprador != null && producto !=null && producto.isHabilitado() && comprador.getSaldo() >= producto.getPrice()) {
-			
-				comprador.setSaldo(comprador.getSaldo() - producto.getPrice());
-				comprador.getHistorialDeCompras().add(producto); 
-				producto.setHabilitado(false);
-			
-			
-				if (producto.getSeller() != null) {
-					Seller vendedor = db.find(Seller.class, producto.getSeller().getNombreUsuario());
-					if (vendedor != null) {
-						producto.setUsuarioVendedor(vendedor.getNombreUsuario());
-						vendedor.setSaldo(vendedor.getSaldo() + producto.getPrice());
-						vendedor.getSales().remove(producto);
-						db.persist(vendedor);
-					}
-				}
+				intercambioProductos(comprador, producto);
 				db.persist(comprador);
 				db.persist(producto);
 				db.getTransaction().commit();
 				close();
 				return true; 
-			}			
-			
+			}
 			close();
 			return false;
 		}
@@ -396,6 +384,21 @@ public void open(){
 			return false;
 		}
     }
+
+	private void intercambioProductos(Comprador comprador, Sale producto) {
+		comprador.setSaldo(comprador.getSaldo() - producto.getPrice());
+		comprador.getHistorialDeCompras().add(producto); 
+		producto.setHabilitado(false);
+		if (producto.getSeller() != null) {
+			Seller vendedor = db.find(Seller.class, producto.getSeller().getNombreUsuario());
+			if (vendedor != null) {
+				producto.setUsuarioVendedor(vendedor.getNombreUsuario());
+				vendedor.setSaldo(vendedor.getSaldo() + producto.getPrice());
+				vendedor.getSales().remove(producto);
+				db.persist(vendedor);
+			}
+		}
+	}
   
 
     public void eliminarUsuario(String usuario) {
@@ -602,24 +605,12 @@ public void open(){
 	public void aceptarOferta(Sale s, Oferta o) {
 		open();
 		db.getTransaction().begin();
-		Sale sA = db.find(Sale.class,s.getSaleNumber());
-		Oferta dOf = db.find(Oferta.class, o.getOfertaNumber());
-		Seller sel= db.find(Seller.class, s.getSeller());
-		Comprador com = db.find(Comprador.class, dOf.getnUser());
-		com.getOfertasEnCurso().remove(dOf);
-		float nuevoSaldo = sel.getSaldo() + dOf.getPrecio();
-		sel.setSaldo(nuevoSaldo);
-		sA.getOfertas().remove(dOf);
-		sA.setPrice(dOf.getPrecio());
-		com.getHistorialDeCompras().add(sA);
-		sel.getSales().remove(sA);
-		sA.setHabilitado(false);
-		db.remove(dOf);
+		aceptaOfertas(s, o);
 		db.getTransaction().commit();
 		close();
 	}
-	
-	public void aceptarOfertaIni(Sale s, Oferta o) {
+
+	private void aceptaOfertas(Sale s, Oferta o) {
 		Sale sA = db.find(Sale.class,s.getSaleNumber());
 		Oferta dOf = db.find(Oferta.class, o.getOfertaNumber());
 		Seller sel= db.find(Seller.class, s.getSeller());
@@ -633,6 +624,10 @@ public void open(){
 		sel.getSales().remove(sA);
 		sA.setHabilitado(false);
 		db.remove(dOf);
+	}
+	
+	public void aceptarOfertaIni(Sale s, Oferta o) {
+		aceptaOfertas(s, o);
 	}
 	
 	
