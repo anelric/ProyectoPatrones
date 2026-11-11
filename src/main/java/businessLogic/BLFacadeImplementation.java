@@ -6,14 +6,13 @@ import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+import businessLogic.iterator.ExtendedIteratorSales;
 import dataAccess.CreateSaleParameter;
 import dataAccess.DataAccess;
 import dataAccess.EditSaleParameter;
-import domain.Comprador;
 import domain.Cuentas;
 import domain.Oferta;
 import domain.Sale;
-import domain.Seller;
 import domain.Usuario;
 import exceptions.FileNotUploadedException;
 import exceptions.MustBeLaterThanTodayException;
@@ -70,8 +69,10 @@ public class BLFacadeImplementation  implements BLFacade {
 	}
 
 	public ExtendedIterator<Sale> getSalesIterator(String desc) {
-		List<Sale> sales = this.getSales(desc);
-		return new ExtendedIteratorSales(sales);
+		dbManager.open();
+		List<Sale>  rides=dbManager.getSales(desc);
+		dbManager.close();
+		return new ExtendedIteratorSales(rides);
 	}
 	
 	/**

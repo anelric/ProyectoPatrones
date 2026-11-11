@@ -1,5 +1,6 @@
-package businessLogic;
+package businessLogic.iterator;
 
+import businessLogic.ExtendedIterator;
 import domain.Sale;
 
 import java.util.List;

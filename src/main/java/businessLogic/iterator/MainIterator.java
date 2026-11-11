@@ -1,13 +1,15 @@
-package businessLogic;
+package businessLogic.iterator;
 
+import businessLogic.BLFacade;
+import businessLogic.ExtendedIterator;
 import domain.Sale;
 
 public class MainIterator {
     public static void main(String[]	args)	{
 //	the	BL	is	local
         boolean isLocal =	true;
-        BLFacade	blFacade =	new BLFactory().getBusinessLogicFactory(isLocal);
-        ExtendedIterator<Sale>	it =	blFacade.getSalesIterator();
+        BLFacade blFacade =	new BLFactory().getBusinessLogicFactory(isLocal);
+        ExtendedIterator<Sale> it =	blFacade.getSalesIterator();
         Sale s;
         System.out.println("_____________________");
         System.out.println("FROM	LAST	TO	FIRST");
