@@ -68,6 +68,11 @@ public class BLFacadeImplementation  implements BLFacade {
 		dbManager.close();
 		return rides;
 	}
+
+	public ExtendedIterator<Sale> getSalesIterator(String desc) {
+		List<Sale> sales = this.getSales(desc);
+		return new ExtendedIteratorSales(sales);
+	}
 	
 	/**
 	    * {@inheritDoc}
