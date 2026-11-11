@@ -1,0 +1,23 @@
+package gui.adapter;
+
+import domain.Seller;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class SellerTable extends JFrame {
+    private Seller seller;
+    private JTable	tabla;
+    public SellerTable(Seller seller){
+        super(seller.getName()+"’s	sales ");
+        this.setBounds(100,	100,	700,	200);
+        this.seller =	seller;
+        SellerAdapter	adapt	=	new SellerAdapter(seller);
+        tabla =	new JTable(adapt);
+        tabla.setPreferredScrollableViewportSize(new Dimension(500,	70));
+//Creamos un JscrollPane	y	le agregamos la JTable
+        JScrollPane	scrollPane =	new JScrollPane(tabla);
+//Agregamos el	JScrollPane	al contenedor
+        getContentPane().add(scrollPane,	BorderLayout.CENTER);
+    }
+}
