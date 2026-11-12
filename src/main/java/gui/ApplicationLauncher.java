@@ -30,7 +30,7 @@ public class ApplicationLauncher {
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 
-			MainGUI.setBussinessLogic(c);
+			MainGUI.setBussinessLogic(c.isBusinessLogicLocal());
 			//ErreklamatuGUI g=new ErreklamatuGUI();
 			//g.setVisible(true);
 			

@@ -13,18 +13,18 @@ import dataAccess.DataAccess;
 
 public class BLFacadeFactory {
 	
-	public BLFacade createBLFacade(ConfigXML c) {
+	public BLFacade createBLFacade(Boolean isLocal) throws MalformedURLException {
 		BLFacade appFacadeInterface;
 		
-		if (c.isBusinessLogicLocal()) {
+		if (isLocal) {
 			DataAccess da= new DataAccess();
 			appFacadeInterface=new BLFacadeImplementation(da);
 	
 		}
 		else { //If remote
-			
-			 String serviceName= "http://"+c.getBusinessLogicNode() +":"+ c.getBusinessLogicPort()+"/ws/"+c.getBusinessLogicName()+"?wsdl";	 
-			 URL url = new URL(serviceName);
+			ConfigXML c = ConfigXML.getInstance();	
+			String serviceName= "http://"+c.getBusinessLogicNode() +":"+ c.getBusinessLogicPort()+"/ws/"+c.getBusinessLogicName()+"?wsdl";	 
+			URL url = new URL(serviceName);
 
 	 
 	        //1st argument refers to wsdl document above

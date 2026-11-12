@@ -9,7 +9,7 @@ import factory.BLFacadeFactory;
 public class MainIterator {
     public static void main(String[]	args)	{
 //	the	BL	is	local
-        ConfigXML c = ConfigXML.getInstance().setLocal();
+        boolean c = true;
         BLFacade blFacade =	new BLFacadeFactory().createBLFacade(c);
         ExtendedIterator<Sale> it =	blFacade.getSalesIterator();
         Sale s;

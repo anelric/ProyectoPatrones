@@ -20,6 +20,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.MalformedURLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -46,7 +47,7 @@ public class MainGUI extends JFrame {
 		return appFacadeInterface;
 	}
 	 
-	public static void setBussinessLogic (ConfigXML c){
+	public static void setBussinessLogic (Boolean c) throws MalformedURLException{
 		appFacadeInterface= BLFacadeF.createBLFacade(c);
 	}
 	
