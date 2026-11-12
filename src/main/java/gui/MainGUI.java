@@ -8,10 +8,12 @@ package gui;
 import javax.swing.*;
 
 import businessLogic.BLFacade;
+import configuration.ConfigXML;
 import domain.Comprador;
 import domain.Friendly;
 import domain.Seller;
 import domain.Usuario;
+import factory.BLFacadeFactory;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -38,13 +40,14 @@ public class MainGUI extends JFrame {
 	private JLabel textoErrores= new JLabel("");
 	
     private static BLFacade appFacadeInterface;
+    private static BLFacadeFactory BLFacadeF;
 	
 	public static BLFacade getBusinessLogic(){
 		return appFacadeInterface;
 	}
 	 
-	public static void setBussinessLogic (BLFacade facade){
-		appFacadeInterface=facade;
+	public static void setBussinessLogic (ConfigXML c){
+		appFacadeInterface= BLFacadeF.createBLFacade(c);
 	}
 	
 	public JLabel getTextoErrores() {
@@ -54,8 +57,9 @@ public class MainGUI extends JFrame {
 	/**
 	 * This is the default constructor
 	 */
-	public MainGUI() {
+	public MainGUI(BLFacadeFactory BLFacadeFactory) {
 		super();
+		BLFacadeF = BLFacadeFactory;
 		
 		this.setSize(495, 290);
 		

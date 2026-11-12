@@ -2,13 +2,15 @@ package businessLogic.iterator;
 
 import businessLogic.BLFacade;
 import businessLogic.ExtendedIterator;
+import configuration.ConfigXML;
 import domain.Sale;
+import factory.BLFacadeFactory;
 
 public class MainIterator {
     public static void main(String[]	args)	{
 //	the	BL	is	local
-        boolean isLocal =	true;
-        BLFacade blFacade =	new BLFactory().getBusinessLogicFactory(isLocal);
+        ConfigXML c = ConfigXML.getInstance().setLocal();
+        BLFacade blFacade =	new BLFacadeFactory().createBLFacade(c);
         ExtendedIterator<Sale> it =	blFacade.getSalesIterator();
         Sale s;
         System.out.println("_____________________");
