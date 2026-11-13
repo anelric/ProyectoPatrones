@@ -12,7 +12,7 @@ public class MainAdapter {
 //	the	BL	is	local
     	boolean c = true;
         BLFacade blFacade =	new BLFacadeFactory().createBLFacade(c);
-        Seller s = (Seller) blFacade.buscarPorUser("Aitor Fernandez");
+        Seller s = (Seller) blFacade.buscarPorUser("a");
         SellerTable	st=new	SellerTable(s);
         st.setVisible(true);
     }

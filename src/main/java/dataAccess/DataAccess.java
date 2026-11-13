@@ -91,23 +91,25 @@ public class DataAccess  {
 	 * This method is invoked by the business logic (constructor of BLFacadeImplementation) when the option "initialize" is declared in the tag dataBaseOpenMode of resources/config.xml file
 	 */	
 	public void initializeDB(){
-		try { 
-	       
-			//Create compradores
+		try {
+
 			Cuentas cuentas1 = new Cuentas(1234567890, 100, "A");
-			Cuentas cuentas2 = new Cuentas(1234567890, 100, "B");
-			Cuentas cuentas3 = new Cuentas(1234567890, 100, "C");
 			anadirCuentasIni("a", "a", cuentas1);
-			anadirCuentasIni("b", "b", cuentas2);
-			anadirCuentasIni("c", "c", cuentas3);
 			String vendedor1 = cuentas1.getComprador().getNombreUsuario();
-			addSellerIni(vendedor1, "a", "a");
+			addSellerIni(vendedor1, "a", "Aitor Fernandez");
+
 			Date today = new Date();
-			float price = 100;
-			File foto1 = new File("src/main/resources/images/bici.jpg");
-			File foto2 = new File("src/main/resources/images/descarga.jpg");
-			createSale("A", "a", 1, new CreateSaleParameter(price,  today, vendedor1, foto1, 0));
-			createSale("B", "b", 1, new CreateSaleParameter(price,  today, vendedor1, foto2, 1));
+			File dummyFile = new File("src/main/resources/images/bici.jpg");
+
+			createSale("futbol baloia", "oso polita, gutxi erabilita", 2, new CreateSaleParameter(10.0f, today, vendedor1, dummyFile, 0));
+			createSale("salomon mendiko botak", "44 zenbakia, 3 ateraldi", 2, new CreateSaleParameter(20.0f, today, vendedor1, dummyFile, 0));
+			createSale("samsung 42\" telebista", "berria, erabili gabe", 2, new CreateSaleParameter(175.0f, today, vendedor1, dummyFile, 0));
+			createSale("imac 27", "7 urte, dena ondo dabil", 1, new CreateSaleParameter(200.0f, today, vendedor1, dummyFile, 0));
+			createSale("orbea mendiko bizikleta", "29\" 10 urte", 3, new CreateSaleParameter(225.0f, today, vendedor1, dummyFile, 0));
+			createSale("polar kilor erlojua", "Vantage M", 3, new CreateSaleParameter(30.0f, today, vendedor1, dummyFile, 0));
+			createSale("sukaldeko mahaia", "Prezio finkoa", 3, new CreateSaleParameter(45.0f, today, vendedor1, dummyFile, 0));
+
+			System.out.println("db initialized");
 
 
 		/*	
