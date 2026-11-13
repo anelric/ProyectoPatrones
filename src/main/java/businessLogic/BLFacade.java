@@ -118,4 +118,7 @@ public interface BLFacade  {
 	void actualizarEstadoSolicitud(Integer solNumber, String nuevoEstado);
 	
 	public void eliminarFriendlyAsignado(String usuarioFriendly);
+
+	@WebMethod public ExtendedIterator<Sale> getSalesIterator(String desc);
+
 }

@@ -47,6 +47,6 @@ public class ExtendedIteratorSales implements ExtendedIterator<Sale> {
 
     @Override
     public void goLast() {
-        currentIndex = sales.size() - 1;
+        currentIndex = sales.size();
     }
 }

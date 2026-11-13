@@ -6,12 +6,14 @@ import configuration.ConfigXML;
 import domain.Sale;
 import factory.BLFacadeFactory;
 
+import java.net.MalformedURLException;
+
 public class MainIterator {
-    public static void main(String[]	args)	{
+    public static void main(String[]	args) throws MalformedURLException {
 //	the	BL	is	local
         boolean c = true;
         BLFacade blFacade =	new BLFacadeFactory().createBLFacade(c);
-        ExtendedIterator<Sale> it =	blFacade.getSalesIterator();
+        ExtendedIterator<Sale> it = blFacade.getSalesIterator("");
         Sale s;
         System.out.println("_____________________");
         System.out.println("FROM	LAST	TO	FIRST");
