@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+import businessLogic.iterator.ExtendedIterator;
 import domain.Cuentas;
 import domain.Oferta;
 import domain.Sale;
-import domain.Seller;
 import domain.Usuario;
 import exceptions.FileNotUploadedException;
 import exceptions.MustBeLaterThanTodayException;
@@ -16,10 +16,8 @@ import exceptions.SaleAlreadyExistException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import java.awt.image.BufferedImage;
 import java.awt.Image;
 
-import gui.*;
 /**
  * Interface that specifies the business logic.
  */

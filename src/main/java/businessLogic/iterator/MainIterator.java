@@ -1,8 +1,6 @@
 package businessLogic.iterator;
 
 import businessLogic.BLFacade;
-import businessLogic.ExtendedIterator;
-import configuration.ConfigXML;
 import domain.Sale;
 import factory.BLFacadeFactory;
 

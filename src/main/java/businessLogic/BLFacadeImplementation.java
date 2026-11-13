@@ -6,6 +6,7 @@ import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+import businessLogic.iterator.ExtendedIterator;
 import businessLogic.iterator.ExtendedIteratorSales;
 import dataAccess.CreateSaleParameter;
 import dataAccess.DataAccess;
